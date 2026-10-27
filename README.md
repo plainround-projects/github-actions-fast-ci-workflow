@@ -8,6 +8,7 @@ A fast GitHub Actions CI workflow for a small Python library: it tests on three 
 | **Planned hours** | 4 |
 | **Level** | Beginner |
 | **Architecture** | [ARCHITECTURE.md](ARCHITECTURE.md), decisions in [docs/adr](docs/adr) |
+| **Technology notes** | [tech/README.md](tech/README.md): one beginner-level note for every technology used here |
 
 ## Prerequisites
 
@@ -205,6 +206,7 @@ scripts/             protect-main.sh: require the ci-ok check (run by hand).
 .github/workflows/   ci.yml (stage 5), ci-docs-only.yml, measure-1-plain.yml, measure-2-matrix.yml, measure-3-cache.yml.
 ci/act-runner/       the Dockerfile of the image act uses as ubuntu-latest.
 docs/                index.md (the folder the path filter ignores) and docs/adr (three decision records).
+tech/                one beginner-level note per technology used here (start at tech/README.md).
 pyproject.toml       project metadata and every tool's configuration (ruff, mypy, pytest, coverage, import-linter).
 requirements*.in/.txt  top-level pins and the hash-pinned universal locks compiled from them with uv.
 Makefile             the only commands a reader needs (make help).
