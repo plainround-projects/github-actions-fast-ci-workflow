@@ -1,0 +1,21 @@
+name: ci-docs-only
+
+# Reports the required check "ci-ok" when a change touches documentation, because ci.yml does not start for it.
+# Without this workflow a docs-only pull request would wait for a check that never runs.
+on:
+  push:
+    branches: [main]
+    paths: ["docs/**", "**.md"]
+  pull_request:
+    paths: ["docs/**", "**.md"]
+
+permissions: {}
+
+jobs:
+  ci-ok:
+    name: ci-ok
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    permissions: {}
+    steps:
+      - run: echo "documentation change - no test jobs needed"
