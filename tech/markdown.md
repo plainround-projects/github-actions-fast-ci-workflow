@@ -63,6 +63,20 @@ flowchart LR
 
 Docs-only changes are cheap on purpose: a commit that only touches `*.md` or `docs/` starts no test jobs (see `github-actions.md`).
 
+### The three decision records, in plain words
+
+An **ADR** (architecture decision record) is a short document that records one decision and why it was made, so nobody has to guess later. Each has `Status`, `Context`, `Decision`, `Alternatives considered` and `Consequences`.
+
+**`docs/adr/0001-one-gate-job-and-a-companion-for-docs-only-changes.md`.** *Problem:* a workflow skipped by a path filter reports no check at all, so a required check from it stays "pending" and a documentation pull request could never merge; and the six matrix names are fragile to require, because adding a Python version outdates the list. *Decision:* `ci.yml` ends with one job `ci-ok` that `needs` every other job, runs with `if: always()` and fails when any of them failed or was cancelled (`pipeline/gate.py`); `ci-docs-only.yml` starts on the inverse filter and has a job also named `ci-ok` that succeeds; a test asserts the two names match and the two filters are inverses on sample changes. *Rejected:* not requiring the check (nothing stops a red merge); a `changes` job with `if:` on every job (starts a run even for documentation); requiring the six matrix names. *Consequence:* a change mixing documentation and code starts both workflows; this edge case needs a real GitHub repository to confirm, and the record says how.
+
+**`docs/adr/0002-hash-pinned-universal-lock-files.md`.** *Problem:* the cache key is built from the lock file's hash, so the lock must be one file for every matrix cell and change only when a dependency changes; a plain `pip freeze` is specific to one machine. *Decision:* `requirements.in` and `requirements-dev.in` list direct dependencies with exact versions; `uv pip compile --universal --generate-hashes --python-version 3.10` makes the locks, with environment markers and SHA-256 hashes; every install uses `pip install --require-hashes`. *Rejected:* unhashed pins; `uv sync` with `uv.lock` (uv is used only to compile). *Consequence:* changing a dependency means editing the `.in` file and recompiling; the cache misses once, which proves the key follows the lock.
+
+**`docs/adr/0003-measure-each-stage-with-its-own-workflow.md`.** *Problem:* measuring four stages by editing `ci.yml` and pushing commits mixes stages in the history. *Decision:* three workflows that run only on `workflow_dispatch` hold the first three stages (`measure-1-plain.yml`, `measure-2-matrix.yml`, `measure-3-cache.yml`); the fourth is `ci.yml`; `make measure` and `pipeline/billing.py` produce the table row. *Rejected:* one workflow edited per stage; reading the billing page (aggregated by day). *Consequence:* the measurement workflows duplicate most of `ci.yml` on purpose; real numbers need real GitHub runners, so the repository ships the tool and a fixture-based example, not invented numbers.
+
+### The other documents
+
+`docs/index.md` is the folder the path filter ignores (editing it must not start the test workflow). `CHANGELOG.md` lists what changed in each version. `README.md` is the front page; `ARCHITECTURE.md` explains the parts. `LICENSE` is the MIT license, a short legal text that lets anyone use and change the code as long as the notice is kept.
+
 ## Try it yourself
 
 1. Open `ARCHITECTURE.md` on GitHub (or in an editor with Mermaid preview) to see the diagram.
