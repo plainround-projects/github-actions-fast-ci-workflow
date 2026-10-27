@@ -227,6 +227,13 @@ uv pip compile requirements-dev.in --universal --generate-hashes --python-versio
 - **Apple silicon:** `.actrc` sets `--container-architecture linux/arm64` so no emulation is used. On an x86 machine remove that line.
 - **`make lint` fails on `actionlint: command not found`:** `brew install actionlint shellcheck`.
 
+## Verification status (2026-10-27)
+
+- Passed on this machine, from a fresh clone: `make check` (lint, ruff, mypy, import-linter, actionlint, shellcheck, pin check; 90 tests passed, 1 skipped, coverage 96.84%).
+- Passed with `act` in Docker, on a laptop whose load average was in the dozens (the long pytest durations in the outputs above come from that): `make run` (Python 3.10, 3.11 and 3.12 legs green) and `make run-fail` (3.10 red on purpose, 3.11 and 3.12 green, reports still listed with 7-day retention).
+- Pending capacity: the runner image was built from this `ci/act-runner/Dockerfile` (the build client reported a deadline error after the layers were done, but the tagged image was present and was the one used), and `make up` was not re-run from a fresh clone. After Docker Desktop is restarted with free disk (Docker.raw was at its 60 GiB cap on 2026-10-28), run `make up` and then `make run && make run-fail`.
+- Could not run anywhere here, only on GitHub: the real durations and billable minutes of the table, the second-run cache hit, the Windows legs, path filters and cancellation as GitHub applies them, `scripts/protect-main.sh` (dry run only).
+
 ## Author and license
 
 Written by Sumit Srivastava. Released under the MIT License, see [LICENSE](LICENSE). Changes are in [CHANGELOG.md](CHANGELOG.md).
