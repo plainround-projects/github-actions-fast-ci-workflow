@@ -4,7 +4,7 @@ STAMP := .venv/.installed
 BIN ?= $(if $(CI),,.venv/bin/)
 DEPS := $(if $(CI),,$(STAMP))
 PYTHON ?= $(shell command -v python3.13 || command -v python3.12 || command -v python3.11 || command -v python3.10)
-ACT_IMAGE := plainround-act-runner:ubuntu-24.04
+ACT_IMAGE := gha-projects-act-runner:ubuntu-24.04
 export PYTHONDONTWRITEBYTECODE ?= 1
 
 .PHONY: help install up run run-fail test matrix-local lint format audit measure check down clean

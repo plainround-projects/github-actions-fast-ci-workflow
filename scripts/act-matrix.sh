@@ -31,10 +31,14 @@ for version in "${versions[@]}"; do
   echo "== Python $version"
   if act push "${flags[@]}" -W .github/workflows/ci.yml -j test --matrix os:ubuntu-latest --matrix "python:$version" >"$log" 2>&1; then
     results+=("$version:green")
+  elif grep -q "Job succeeded" "$log" && ! grep -q "Job failed" "$log"; then
+    # A busy Docker daemon can time out while act removes the job's volumes, after the job itself succeeded.
+    echo "   (act reported a Docker cleanup error after the job succeeded; see $log)"
+    results+=("$version:green")
   else
     results+=("$version:red")
   fi
-  grep -E "Cache (restored|not found|hit)|pip cache is not found|passed|failed|skipped|DELIBERATE|deliberate|Success - Main actions/upload|Failure - Main" "$log" | sed 's/^/   /' | cut -c1-200 || true
+  grep -E "Cache (restored|not found|hit)|pip cache is not found|passed|failed|skipped|deliberate|\| artifact reports-|Failure - Main" "$log" | sed 's/^/   /' | cut -c1-200 || true
 done
 
 echo
