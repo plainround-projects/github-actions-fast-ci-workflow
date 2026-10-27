@@ -241,7 +241,7 @@ def test_mean_of_nothing_is_an_error():
         mean([])
 ```
 
-`mean([0.1] * 10) == 0.1`: the list `[0.1] * 10` repeats the item ten times; `math.fsum` adds them exactly enough that the mean is exactly `0.1` (plain addition would give a mean of `0.09999999999999999` on some versions). `mean([])` must raise `EmptyInputError`.
+`mean([0.1] * 10) == 0.1`: the list `[0.1] * 10` repeats the item ten times; `math.fsum` adds them exactly enough that the mean is exactly `0.1`. (Plain left-to-right addition of ten `0.1` values gives `0.9999999999999999` on Python versions before 3.12, whose built-in `sum` of floats was improved; `fsum` gives the right answer on every version, which is why the test is written this way.) `mean([])` must raise `EmptyInputError`.
 
 Lines 17 to 27:
 
