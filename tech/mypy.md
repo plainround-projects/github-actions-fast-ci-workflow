@@ -4,6 +4,27 @@
 
 mypy is a **static type checker** for Python. Python lets you write **type hints**, such as `def add(left: int, right: int) -> int`, but the interpreter ignores them. mypy reads them without running the code and reports places where the types do not fit, for example passing text where a number is expected. This repository pins mypy 1.13.0.
 
+<!-- words -->
+
+<details>
+<summary><b>Words this note uses, in case they are new to you</b> (click to open)</summary>
+
+- **repository**: A project's folder of files together with its complete history of changes. On GitHub, a repository is a page with those files, issues and pull requests.
+- **CI**: Continuous integration: running checks (build, tests, linters) automatically every time code changes.
+- **YAML**: A plain-text format for structured data that uses indentation instead of braces. GitHub workflows are YAML files.
+- **package**: In Python, a folder with an `__init__.py` file that can be imported as a unit; also a bundle of code installed with pip.
+- **library**: A package of ready-made code that your program calls.
+- **module**: A file, or a folder of files, that other code can load and use. In Terraform, a module is a folder of configuration used like a function.
+- **function**: A named piece of code that takes inputs (parameters), does something, and may return a result.
+- **class**: A blueprint for objects: it bundles data and the functions that work on it. `new Name(...)` or `Name(...)` makes an object from it.
+- **boolean**: A value that is either true or false.
+- **version**: A number such as `1.2.3` that names one release of software (major.minor.patch).
+- **test**: A small program that uses your code and checks that the answer is the one you expected.
+
+</details>
+
+<!-- /words -->
+
 ## Why this repository uses it
 
 The template asks for typed code checked in CI. Types catch a class of mistakes early and document what each function takes and returns. The `pipeline/` scripts are code too, so they are checked with the same strict rules.

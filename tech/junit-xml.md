@@ -4,6 +4,26 @@
 
 JUnit XML is a file format for test results. It started with the Java test tool JUnit, and almost every test tool can now write it. It is XML: text with nested tags such as `<testcase name="...">`. Because many tools understand it, one report can be uploaded, archived, or turned into a summary by any program.
 
+<!-- words -->
+
+<details>
+<summary><b>Words this note uses, in case they are new to you</b> (click to open)</summary>
+
+- **repository**: A project's folder of files together with its complete history of changes. On GitHub, a repository is a page with those files, issues and pull requests.
+- **workflow**: A GitHub Actions automation described in a YAML file under `.github/workflows/`. It names the events that start it and the jobs it runs.
+- **artifact**: A file or folder that a job saves so that later jobs, or people, can download it.
+- **Markdown**: A plain-text way to write formatted documents: `#` for headings, `-` for bullets, backticks for code, `|` for tables.
+- **library**: A package of ready-made code that your program calls.
+- **list**: An ordered collection of values written one after another.
+- **test**: A small program that uses your code and checks that the answer is the one you expected.
+- **comprehension**: A short way to build a list, set or dictionary from a loop in one expression, such as `[x * 2 for x in items if x > 0]`.
+- **pytest**: A Python test framework: it finds functions named `test_...`, runs them, and reports failures.
+- **matrix**: In GitHub Actions, a list of values (for example operating systems and Python versions) from which GitHub starts one job for every combination.
+
+</details>
+
+<!-- /words -->
+
 ## Why this repository uses it
 
 The lesson uploads test reports as artifacts and asks that a failing run still has its report. `pytest --junitxml=report.xml` writes that file in each matrix job. The repository also reads it: `pipeline/slowest_tests.py` turns it into a table of the five slowest tests for the job summary page.

@@ -4,6 +4,24 @@
 
 pip is the program that installs Python packages from the Python Package Index (PyPI), a public store of libraries. A **virtual environment** (venv) is a private folder holding its own Python and its own installed packages, so one project's libraries do not mix with another's. A **requirements file** lists what to install. A **lock file** is a requirements file that pins *every* package, including the ones your packages need, to exact versions, and here also to exact file hashes. pip comes with Python (the `setup-python` action and Python 3.13 both provide a recent one).
 
+<!-- words -->
+
+<details>
+<summary><b>Words this note uses, in case they are new to you</b> (click to open)</summary>
+
+- **repository**: A project's folder of files together with its complete history of changes. On GitHub, a repository is a page with those files, issues and pull requests.
+- **workflow**: A GitHub Actions automation described in a YAML file under `.github/workflows/`. It names the events that start it and the jobs it runs.
+- **library**: A package of ready-made code that your program calls.
+- **dependency**: A package that your project needs in order to work.
+- **folder**: A container for files and other folders on disk (also called a directory).
+- **version**: A number such as `1.2.3` that names one release of software (major.minor.patch).
+- **pytest**: A Python test framework: it finds functions named `test_...`, runs them, and reports failures.
+- **matrix**: In GitHub Actions, a list of values (for example operating systems and Python versions) from which GitHub starts one job for every combination.
+
+</details>
+
+<!-- /words -->
+
 ## Why this repository uses it
 
 The CI cache is keyed on the hash of the lock file, so there must be one file whose contents change exactly when a dependency changes. The same file must work on six combinations (Linux and Windows, Python 3.10 to 3.12). Hashes mean pip refuses a package file that is not byte-for-byte the one that was locked, which protects against a compromised or replaced upload.

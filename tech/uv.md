@@ -4,6 +4,24 @@
 
 uv is a fast Python package tool written in Rust. It can do much of what pip and venv do, and it can also **resolve** dependencies: given the packages you name, work out which exact versions of everything satisfy all the requirements at once. This repository uses uv in two places only, and only on a developer's machine, never in CI: `uv pip compile` to make the lock files, and `uv run` to test on several Python versions.
 
+<!-- words -->
+
+<details>
+<summary><b>Words this note uses, in case they are new to you</b> (click to open)</summary>
+
+- **commit**: A saved snapshot of a project's files in Git, with a message and an author. Every commit has a unique 40-character name (its SHA).
+- **repository**: A project's folder of files together with its complete history of changes. On GitHub, a repository is a page with those files, issues and pull requests.
+- **package**: In Python, a folder with an `__init__.py` file that can be imported as a unit; also a bundle of code installed with pip.
+- **lock file**: A file that records the exact version, and a checksum, of every package that was installed, so that everyone installs exactly the same thing.
+- **folder**: A container for files and other folders on disk (also called a directory).
+- **version**: A number such as `1.2.3` that names one release of software (major.minor.patch).
+- **test**: A small program that uses your code and checks that the answer is the one you expected.
+- **pytest**: A Python test framework: it finds functions named `test_...`, runs them, and reports failures.
+
+</details>
+
+<!-- /words -->
+
 ## Why this repository uses it
 
 The CI cache is keyed on the lock file, and one lock file has to work for Python 3.10, 3.11 and 3.12 on Linux and Windows. pip alone cannot make such a file. `uv pip compile --universal` can: it resolves once for every platform and writes environment markers (see `pip.md`) where the answers differ.

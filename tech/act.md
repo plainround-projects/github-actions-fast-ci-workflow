@@ -4,6 +4,32 @@
 
 act is a command-line tool that runs GitHub Actions workflows on your own machine. It reads the workflow YAML, starts a Docker container for each job (see `docker.md`), and runs the steps inside. It is a close imitation of GitHub's runner, not an exact copy. This repository uses act 0.2.89.
 
+<!-- words -->
+
+<details>
+<summary><b>Words this note uses, in case they are new to you</b> (click to open)</summary>
+
+- **shell**: The program inside a terminal that reads what you type and starts other programs. Bash is a shell.
+- **repository**: A project's folder of files together with its complete history of changes. On GitHub, a repository is a page with those files, issues and pull requests.
+- **workflow**: A GitHub Actions automation described in a YAML file under `.github/workflows/`. It names the events that start it and the jobs it runs.
+- **runner**: The computer, usually a virtual machine, on which GitHub runs a job. It starts clean for every job.
+- **artifact**: A file or folder that a job saves so that later jobs, or people, can download it.
+- **YAML**: A plain-text format for structured data that uses indentation instead of braces. GitHub workflows are YAML files.
+- **container**: A running, isolated copy of a program together with its own files, started from an image. Containers are managed by Docker.
+- **Docker**: A tool that builds images and runs containers.
+- **cache**: A saved copy of something slow to produce (such as downloaded packages), kept so the next run can reuse it.
+- **variable**: A name for a place that holds a value which can be used later in the code.
+- **list**: An ordered collection of values written one after another.
+- **server**: A program that waits for requests and answers them.
+- **folder**: A container for files and other folders on disk (also called a directory).
+- **version**: A number such as `1.2.3` that names one release of software (major.minor.patch).
+- **test**: A small program that uses your code and checks that the answer is the one you expected.
+- **matrix**: In GitHub Actions, a list of values (for example operating systems and Python versions) from which GitHub starts one job for every combination.
+
+</details>
+
+<!-- /words -->
+
 ## Why this repository uses it
 
 The task says the main workflow should run locally "where it works", with exact commands. `make run` runs the test job on three Ubuntu Python versions without pushing anything, and `make run-fail` shows one red job and two green ones.
@@ -72,6 +98,94 @@ The cache service has the same networking limit. `actions/setup-python`'s cache 
 ### A Docker cleanup error after a successful job
 
 `scripts/act-matrix.sh` accepts a run as green when the log says `Job succeeded` and not `Job failed`, even if act exits with an error. On a busy Docker daemon act can time out removing volumes after the job itself finished.
+
+<!-- walk:ci/act-stubs/upload-artifact/action.yml -->
+### `ci/act-stubs/upload-artifact/action.yml`, line by line
+
+Lines 1 to 24:
+
+```yaml
+# Stand-in for actions/upload-artifact when the workflow runs under act on a Mac.
+
+#
+# The real action talks to GitHub's artifact service, which act can only imitate with a server on the host that the
+
+# runner container cannot reach when Docker runs in a VM. This stand-in does what can be checked locally: it lists the
+
+# files that would be uploaded with their sizes and the retention, and fails when a file is missing and
+
+# if-no-files-found is "error". On GitHub the real action runs; scripts/act-matrix.sh maps this stand-in over it with
+
+# act's --local-repository.
+
+name: upload-artifact (act stand-in)
+description: List what actions/upload-artifact would upload, and fail on a missing file when asked to.
+inputs:
+  name:
+    description: Artifact name.
+    required: true
+  path:
+    description: Files to upload, one per line.
+    required: true
+  retention-days:
+    description: Retention in days.
+    required: false
+    default: ""
+  if-no-files-found:
+    description: warn, error or ignore.
+    required: false
+    default: warn
+```
+
+The comment (lines 1 to 7) explains why this stand-in exists: the real `actions/upload-artifact` talks to GitHub's artifact service, which `act` can only imitate with a server that a runner container inside a virtual machine cannot reach. The stand-in lists the files that would be uploaded, with sizes and retention, and fails when a file is missing and `if-no-files-found` is `error`. `name` and `description` label the action. `inputs:` mirrors the real action's: `name` and `path` (required), `retention-days` (default empty), `if-no-files-found` (default `warn`).
+
+Lines 25 to 47:
+
+```yaml
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      env:
+        ARTIFACT_NAME: ${{ inputs.name }}
+        ARTIFACT_PATHS: ${{ inputs.path }}
+        ARTIFACT_RETENTION: ${{ inputs.retention-days }}
+        ARTIFACT_IF_MISSING: ${{ inputs.if-no-files-found }}
+      run: |
+        missing=0
+        while IFS= read -r file; do
+          [ -n "$file" ] || continue
+          if [ -e "$file" ]; then
+            echo "artifact ${ARTIFACT_NAME}: ${file} ($(wc -c < "$file" | tr -d ' ') bytes), expires in ${ARTIFACT_RETENTION:-90} days"
+          else
+            echo "artifact ${ARTIFACT_NAME}: ${file} is missing"
+            missing=1
+          fi
+        done <<< "$ARTIFACT_PATHS"
+        if [ "$missing" = 1 ] && [ "$ARTIFACT_IF_MISSING" = error ]; then
+          exit 1
+        fi
+```
+
+`runs.using: composite` means the action is a list of steps. The one step names `shell: bash` (required for `run:` steps of a composite action) and receives the inputs as environment variables (never pasted into the script text). The script: `missing=0` is a flag; `while IFS= read -r file; do ... done <<< "$ARTIFACT_PATHS"` reads the list of paths one line at a time (`IFS=` keeps leading spaces, `-r` keeps backslashes, `<<<` feeds a text as input); `[ -n "$file" ] || continue` skips empty lines; `[ -e "$file" ]` tests that the file exists; `wc -c < "$file"` counts bytes and `tr -d ' '` removes spaces; `${ARTIFACT_RETENTION:-90}` means the variable or 90 if empty. If a file was missing and the policy is `error`, the step exits 1 like the real action.
+
+<!-- /walk:ci/act-stubs/upload-artifact/action.yml -->
+
+<!-- walk:.actrc -->
+### `.actrc`, line by line
+
+Lines 1 to 4:
+
+```ini
+-P ubuntu-latest=gha-projects-act-runner:ubuntu-24.04
+--pull=false
+--container-architecture linux/arm64
+--container-daemon-socket -
+```
+
+One option per line. `-P ubuntu-latest=gha-projects-act-runner:ubuntu-24.04` maps the runner label to the locally built image; `--pull=false` stops `act` from trying to download the image; `--container-architecture linux/arm64` runs containers as ARM (Apple Silicon); `--container-daemon-socket -` stops `act` from mounting the Docker socket into the job, which fails on Docker Desktop for Mac.
+
+<!-- /walk:.actrc -->
 
 ## Try it yourself
 

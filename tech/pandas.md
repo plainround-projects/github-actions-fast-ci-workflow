@@ -4,6 +4,29 @@
 
 pandas is a Python library for tables of data. Its main object is the **DataFrame**: rows and named columns, like a spreadsheet in memory. It can read a CSV file ("comma separated values": lines of text with commas between the cells) into a DataFrame in one call. This repository pins pandas 2.2.3.
 
+<!-- words -->
+
+<details>
+<summary><b>Words this note uses, in case they are new to you</b> (click to open)</summary>
+
+- **repository**: A project's folder of files together with its complete history of changes. On GitHub, a repository is a page with those files, issues and pull requests.
+- **library**: A package of ready-made code that your program calls.
+- **dependency**: A package that your project needs in order to work.
+- **cache**: A saved copy of something slow to produce (such as downloaded packages), kept so the next run can reuse it.
+- **module**: A file, or a folder of files, that other code can load and use. In Terraform, a module is a folder of configuration used like a function.
+- **array**: An ordered list of values.
+- **string**: A piece of text in a program.
+- **port**: A number that names one of the doors of a computer on the network; a server listens on a port.
+- **version**: A number such as `1.2.3` that names one release of software (major.minor.patch).
+- **test**: A small program that uses your code and checks that the answer is the one you expected.
+- **comprehension**: A short way to build a list, set or dictionary from a loop in one expression, such as `[x * 2 for x in items if x > 0]`.
+- **exception**: An error raised while a program runs (`raise ValueError("message")`). Code can catch it with `try`/`except`; if nobody catches it the program stops.
+- **CSV**: Comma-separated values: a plain-text table, one row per line, cells separated by commas.
+
+</details>
+
+<!-- /words -->
+
 ## Why this repository uses it
 
 The lesson wants a heavy dependency so the dependency cache has something to save: installing numpy and pandas takes a long time without a cache. To make pandas do real work, `mathkit` has a feature that reads a CSV and summarizes its numeric columns.

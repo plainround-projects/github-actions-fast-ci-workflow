@@ -4,6 +4,25 @@
 
 Markdown is a plain-text way to write formatted documents: `#` for headings, `-` for bullets, backticks for code, `|` for tables. GitHub shows `.md` files as formatted pages. Mermaid is a text language for diagrams; GitHub draws a code block marked `mermaid` as a picture.
 
+<!-- words -->
+
+<details>
+<summary><b>Words this note uses, in case they are new to you</b> (click to open)</summary>
+
+- **commit**: A saved snapshot of a project's files in Git, with a message and an author. Every commit has a unique 40-character name (its SHA).
+- **pull request**: A proposal on GitHub to merge the commits of one branch into another. People review it and automation checks it before it is merged.
+- **workflow**: A GitHub Actions automation described in a YAML file under `.github/workflows/`. It names the events that start it and the jobs it runs.
+- **dependency**: A package that your project needs in order to work.
+- **cache**: A saved copy of something slow to produce (such as downloaded packages), kept so the next run can reuse it.
+- **list**: An ordered collection of values written one after another.
+- **folder**: A container for files and other folders on disk (also called a directory).
+- **test**: A small program that uses your code and checks that the answer is the one you expected.
+- **matrix**: In GitHub Actions, a list of values (for example operating systems and Python versions) from which GitHub starts one job for every combination.
+
+</details>
+
+<!-- /words -->
+
 ## Why this repository uses it
 
 The task requires a detailed README, an architecture document with a diagram, decision records and this `tech/` folder. Plain text in the repository is reviewed in pull requests like code. Markdown is also what the workflow produces: the "slowest tests" table is Markdown written to the job summary page.

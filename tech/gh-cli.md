@@ -4,6 +4,28 @@
 
 `gh` is GitHub's official command-line program. It signs in to your GitHub account once and then lets you call GitHub from the terminal: start workflows, list runs, and send any request to GitHub's REST API with `gh api`.
 
+<!-- words -->
+
+<details>
+<summary><b>Words this note uses, in case they are new to you</b> (click to open)</summary>
+
+- **terminal**: A window where you type commands as text and read the answers as text, instead of clicking.
+- **shell**: The program inside a terminal that reads what you type and starts other programs. Bash is a shell.
+- **environment variable**: A named piece of text that is handed to a program by whoever starts it, for example `HOME` or `CI`. Programs read them to learn about the setting they run in.
+- **repository**: A project's folder of files together with its complete history of changes. On GitHub, a repository is a page with those files, issues and pull requests.
+- **runner**: The computer, usually a virtual machine, on which GitHub runs a job. It starts clean for every job.
+- **API**: Application programming interface: a set of requests a program can send to another program or service, with documented answers. A web API is called over the internet with HTTP.
+- **HTTP**: The protocol (agreed rules) that web browsers and servers use to talk. A request names a **method** (`GET` to read, `POST` to create, `PATCH` to change part, `PUT` to replace, `DELETE` to remove) and an address; the answer carries a **status code** (200 means success, 404 not found, 500 server problem).
+- **JSON**: A plain-text format for structured data: objects `{ "name": "value" }`, lists `[1, 2]`, texts in double quotes, numbers, `true`, `false`, `null`. It has no comments.
+- **token**: A secret text that proves who is asking when a program talks to a service, instead of a password. Tokens can be limited in what they may do and in how long they last.
+- **variable**: A name for a place that holds a value which can be used later in the code.
+- **list**: An ordered collection of values written one after another.
+- **version**: A number such as `1.2.3` that names one release of software (major.minor.patch).
+
+</details>
+
+<!-- /words -->
+
 ## Why this repository uses it
 
 Two parts of the lesson need data from GitHub that only exists after real runs: the duration and billable minutes of each run, and the branch rule that makes `ci-ok` required. `gh` fetches the first and sets the second.

@@ -4,6 +4,23 @@
 
 YAML is a text format for writing structured data: lists, named values, and nests of both. People read and write it easily, and programs read it too. It is a **file format**, not a language that runs. GitHub Actions workflows, Dependabot settings and the action stand-in in this repository are all YAML files (`.yml` or `.yaml`).
 
+<!-- words -->
+
+<details>
+<summary><b>Words this note uses, in case they are new to you</b> (click to open)</summary>
+
+- **shell**: The program inside a terminal that reads what you type and starts other programs. Bash is a shell.
+- **workflow**: A GitHub Actions automation described in a YAML file under `.github/workflows/`. It names the events that start it and the jobs it runs.
+- **list**: An ordered collection of values written one after another.
+- **boolean**: A value that is either true or false.
+- **test**: A small program that uses your code and checks that the answer is the one you expected.
+- **dictionary**: A Python mapping from keys to values, written `{"key": value}`.
+- **matrix**: In GitHub Actions, a list of values (for example operating systems and Python versions) from which GitHub starts one job for every combination.
+
+</details>
+
+<!-- /words -->
+
 ## Why this repository uses it
 
 GitHub Actions only understands YAML for workflow files, and Dependabot only reads a YAML settings file. The repository also has Python code that *reads* the YAML files to check rules about them, so the format matters twice.

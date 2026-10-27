@@ -4,6 +4,27 @@
 
 PyYAML is a Python **library**: code someone else wrote that you install and import. It reads YAML text (see `yaml.md`) and turns it into Python dictionaries, lists, strings and numbers. This repository pins version 6.0.2.
 
+<!-- words -->
+
+<details>
+<summary><b>Words this note uses, in case they are new to you</b> (click to open)</summary>
+
+- **SHA**: A family of hash functions. A Git **commit SHA** is a 40-character hexadecimal fingerprint that names one exact commit.
+- **commit**: A saved snapshot of a project's files in Git, with a message and an author. Every commit has a unique 40-character name (its SHA).
+- **tag**: A name attached to a commit in Git, usually a version such as `v1.0.0`. Unlike a commit's SHA, a tag can be moved to another commit.
+- **repository**: A project's folder of files together with its complete history of changes. On GitHub, a repository is a page with those files, issues and pull requests.
+- **YAML**: A plain-text format for structured data that uses indentation instead of braces. GitHub workflows are YAML files.
+- **package**: In Python, a folder with an `__init__.py` file that can be imported as a unit; also a bundle of code installed with pip.
+- **list**: An ordered collection of values written one after another.
+- **UTF-8**: The usual way of storing text as bytes, able to represent every written language.
+- **version**: A number such as `1.2.3` that names one release of software (major.minor.patch).
+- **dictionary**: A Python mapping from keys to values, written `{"key": value}`.
+- **matrix**: In GitHub Actions, a list of values (for example operating systems and Python versions) from which GitHub starts one job for every combination.
+
+</details>
+
+<!-- /words -->
+
 ## Why this repository uses it
 
 Two pieces of this repository need to read workflow files as data. `pipeline/pins.py` checks that every `uses:` line names a full commit SHA. `tests/pipeline/test_workflows.py` turns the lesson's review checklist into assertions about `ci.yml` (three quoted versions, `fail-fast: false`, seven-day retention, and so on). Both would be fragile with plain text search, so they parse the YAML.

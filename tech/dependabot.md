@@ -4,6 +4,22 @@
 
 Dependabot is a GitHub service that opens pull requests to update your dependencies when new versions come out. You configure it with a YAML file. It can watch GitHub Actions versions, Python packages and many other kinds.
 
+<!-- words -->
+
+<details>
+<summary><b>Words this note uses, in case they are new to you</b> (click to open)</summary>
+
+- **commit**: A saved snapshot of a project's files in Git, with a message and an author. Every commit has a unique 40-character name (its SHA).
+- **pull request**: A proposal on GitHub to merge the commits of one branch into another. People review it and automation checks it before it is merged.
+- **repository**: A project's folder of files together with its complete history of changes. On GitHub, a repository is a page with those files, issues and pull requests.
+- **CI**: Continuous integration: running checks (build, tests, linters) automatically every time code changes.
+- **YAML**: A plain-text format for structured data that uses indentation instead of braces. GitHub workflows are YAML files.
+- **dependency**: A package that your project needs in order to work.
+
+</details>
+
+<!-- /words -->
+
 ## Why this repository uses it
 
 Every action is pinned to a 40-character commit SHA, and Python packages are pinned with hashes. Pins are safe but they go stale. Dependabot proposes the update as a pull request, and the CI runs on it, so keeping current is a review instead of a chore.
