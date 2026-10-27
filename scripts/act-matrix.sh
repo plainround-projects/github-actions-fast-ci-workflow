@@ -15,26 +15,24 @@ if [[ "${1:-}" == "--fail-on" ]]; then
   fail_on="${2:?usage: scripts/act-matrix.sh [--fail-on VERSION]}"
 fi
 
-# act's cache and artifact servers must be reachable from the runner container, which on Docker Desktop is inside a VM:
-# bind them to the Mac's LAN address.
-flags=(--concurrent-jobs 1 --artifact-server-port 38567 --artifact-server-path "$root/build/artifacts")
-host_ip="$(ipconfig getifaddr en0 2>/dev/null || true)"
-if [[ -n "$host_ip" ]]; then
-  flags+=(--cache-server-addr "$host_ip" --artifact-server-addr "$host_ip")
-fi
+# act's artifact service cannot be reached from a runner container when Docker runs in a VM, so the pinned
+# upload-artifact action is replaced by a stand-in that lists the files and checks the missing-file rule. The cache
+# service has the same problem: setup-python warns that it cannot restore or save and carries on.
+upload_artifact="$(grep -o 'actions/upload-artifact@[0-9a-f]\{40\}' .github/workflows/ci.yml | head -1)"
+flags=(--concurrent-jobs 1 --local-repository "$upload_artifact=$root/ci/act-stubs/upload-artifact")
 if [[ -n "$fail_on" ]]; then
   flags+=(--var "DEMO_FAIL_ON_PYTHON=$fail_on")
 fi
 
 mkdir -p "$root/build/act"
-declare -A result
+results=()
 for version in "${versions[@]}"; do
   log="$root/build/act/test-$version${fail_on:+-fail-on-$fail_on}.log"
   echo "== Python $version"
   if act push "${flags[@]}" -W .github/workflows/ci.yml -j test --matrix os:ubuntu-latest --matrix "python:$version" >"$log" 2>&1; then
-    result[$version]="green"
+    results+=("$version:green")
   else
-    result[$version]="red"
+    results+=("$version:red")
   fi
   grep -E "Cache (restored|not found|hit)|pip cache is not found|passed|failed|skipped|DELIBERATE|deliberate|Success - Main actions/upload|Failure - Main" "$log" | sed 's/^/   /' | cut -c1-200 || true
 done
@@ -42,12 +40,14 @@ done
 echo
 printf '%-8s %s\n' "python" "result"
 bad=0
-for version in "${versions[@]}"; do
-  printf '%-8s %s\n' "$version" "${result[$version]}"
+for entry in "${results[@]}"; do
+  version="${entry%%:*}"
+  outcome="${entry##*:}"
+  printf '%-8s %s\n' "$version" "$outcome"
   if [[ "$version" == "$fail_on" ]]; then
-    [[ "${result[$version]}" == "red" ]] || bad=1
+    [[ "$outcome" == "red" ]] || bad=1
   else
-    [[ "${result[$version]}" == "green" ]] || bad=1
+    [[ "$outcome" == "green" ]] || bad=1
   fi
 done
 
