@@ -729,7 +729,7 @@ class Job:
         return math.ceil(self.seconds / 60) * RATES[self.family]
 ```
 
-`@dataclass(frozen=True, slots=True)` (a decorator: it writes the constructor and other boilerplate for a class that holds data; frozen means unchangeable). A `Job` has a name, the OS family of its runner and two `datetime` values. `@property` turns a method into something read like a field (`job.seconds`). `seconds` subtracts two datetimes, which gives a `timedelta`, and `.total_seconds()` converts it to a number. `billable_minutes` is `math.ceil(self.seconds / 60) * RATES[self.family]`: `math.ceil` rounds up, so 61 seconds is 2 minutes.
+`@dataclass(frozen=True, slots=True)` (a decorator: it writes the constructor, the equality comparison and the printed form for a class that only holds data; frozen means unchangeable). A `Job` has a name, the OS family of its runner and two `datetime` values. `@property` turns a method into something read like a field (`job.seconds`). `seconds` subtracts two datetimes, which gives a `timedelta`, and `.total_seconds()` converts it to a number. `billable_minutes` is `math.ceil(self.seconds / 60) * RATES[self.family]`: `math.ceil` rounds up, so 61 seconds is 2 minutes.
 
 Lines 45 to 50:
 

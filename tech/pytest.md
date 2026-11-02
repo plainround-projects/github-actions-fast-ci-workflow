@@ -154,7 +154,7 @@ The end-to-end tests start `python -m mathkit` as a real process and check its o
 
 ### Tests of the workflow files
 
-`tests/pipeline/test_workflows.py` loads `ci.yml` with PyYAML and asserts the lesson's checklist: matrix values, `fail-fast: false`, `retention-days: 7`, the concurrency expression, and so on. The workflow becomes testable code.
+`tests/pipeline/test_workflows.py` loads `ci.yml` with PyYAML and asserts the lesson's checklist: the token starts read-only; every job states `permissions` and `timeout-minutes`; the matrix values and `fail-fast: false`; the pip cache keys; the report upload (always, with a unique name, `retention-days: 7` and `if-no-files-found: error`); the concurrency expression; `paths-ignore` on both events; the companion workflow and the same `ci-ok` name; the gate job; the manual-only measurement workflows; and that every action is pinned. The workflow becomes testable code.
 
 ### Coverage
 

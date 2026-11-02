@@ -27,7 +27,7 @@ PyYAML is a Python **library**: code someone else wrote that you install and imp
 
 ## Why this repository uses it
 
-Two pieces of this repository need to read workflow files as data. `pipeline/pins.py` checks that every `uses:` line names a full commit SHA. `tests/pipeline/test_workflows.py` turns the lesson's review checklist into assertions about `ci.yml` (three quoted versions, `fail-fast: false`, seven-day retention, and so on). Both would be fragile with plain text search, so they parse the YAML.
+Two pieces of this repository need to read workflow files as data. `pipeline/pins.py` checks that every `uses:` line names a full commit SHA. `tests/pipeline/test_workflows.py` turns the lesson's review checklist into assertions about `ci.yml` (the read-only token, a permissions block and timeout on every job, three quoted Python versions on two operating systems, `fail-fast: false`, the cache settings, the report upload with seven-day retention, the concurrency expression, `paths-ignore` on both events, the companion workflow, the `ci-ok` gate, the manual-only measurement workflows and the pinned actions). Both would be fragile with plain text search, so they parse the YAML.
 
 ## Where it appears
 
