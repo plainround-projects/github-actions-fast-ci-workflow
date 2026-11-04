@@ -3,5 +3,5 @@
 ruff==0.8.4
 mypy==1.13.0
 types-PyYAML==6.0.12.20241230
-import-linter==2.1
+import-linter==2.15
 pip-audit==2.7.3
