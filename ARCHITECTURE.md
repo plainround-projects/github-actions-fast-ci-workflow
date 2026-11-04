@@ -21,6 +21,8 @@ Anything in a workflow that is more than one command lives in `pipeline/` as a t
 
 ## Data flow
 
+Drawn versions of this figure and of the walk-through: [the architecture](docs/diagrams/architecture.svg) and [one run](docs/diagrams/flow.svg).
+
 ```mermaid
 flowchart LR
     push["Push or pull request"] --> filter{"Path filter<br/>docs/** and *.md ignored"}

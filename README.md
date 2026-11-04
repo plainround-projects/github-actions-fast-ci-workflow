@@ -10,6 +10,24 @@ A fast GitHub Actions CI workflow for a small Python library: it tests on three 
 | **Architecture** | [ARCHITECTURE.md](ARCHITECTURE.md), decisions in [docs/adr](docs/adr) |
 | **Technology notes** | [tech/README.md](tech/README.md): one beginner-level note for every technology used here |
 
+## Architecture
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/architecture-dark.svg">
+  <img alt="A push or pull request meets the path filter: docs-only changes go to ci-docs-only.yml, code changes start the lint job and a matrix of 3 versions by 2 systems. The matrix reads the dependency cache, runs pytest and keeps test reports for 7 days even on failure, drawn in amber. The ci-ok gate collects lint, the matrix and the docs job, and a newer push cancels the matrix." src="docs/diagrams/architecture.svg">
+</picture>
+
+Notice that one required check, ci-ok, stands in for every job, so changing the matrix never changes the branch rule.
+
+## How one run flows
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/flow-dark.svg">
+  <img alt="One push of a code change: the path filter lets it start, lint and six test jobs run in parallel, and ci-ok reads their results. The amber row shows Python 3.10 failing on purpose while the reports are still uploaded." src="docs/diagrams/flow.svg">
+</picture>
+
+The run goes from the path filter through cache, install and pytest to the single required check; the amber row is one red combination whose reports are kept anyway.
+
 ## Prerequisites
 
 | Tool | Version | Used for |
